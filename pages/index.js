@@ -4,7 +4,7 @@ import { useAuth } from '../lib/auth'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
-  const autho = useAuth()
+  const auth = useAuth()
   return (
     <div className={styles.container}>
       <Head>
@@ -21,11 +21,9 @@ export default function Home() {
           <code className={styles.code}>pages/index.js</code>
         </p>
 
-        <button onClick={e => autho.signinWithGithub()}>Sign In</button>
-        <div>{autho?.user?.email}</div>
-        {autho?.user && (
-          <button onClick={e => autho.signout()}>Sign Out</button>
-        )}
+        <button onClick={e => auth.signinWithGithub()}>Sign In</button>
+        <div>{auth?.user?.email}</div>
+        {auth?.user && <button onClick={e => auth.signout()}>Sign Out</button>}
       </main>
 
       <footer className={styles.footer}>
