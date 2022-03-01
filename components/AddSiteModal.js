@@ -13,10 +13,12 @@ import {
   FormLabel,
   Input,
   Button,
-  FormErrorMessage
+  FormErrorMessage,
+  useToast
 } from '@chakra-ui/react'
 
 import { useForm } from 'react-hook-form'
+import { useAuth } from '../lib/auth'
 import { createSite } from '../lib/db'
 
 export default function AddSiteModal() {
@@ -24,13 +26,32 @@ export default function AddSiteModal() {
 
   const initialRef = useRef()
 
+  const toast = useToast()
+
+  const { user } = useAuth()
+
   const {
     handleSubmit,
     register,
     formState: { errors }
   } = useForm()
 
-  const onCreateSite = values => createSite(values)
+  const onCreateSite = ({ site, url }) => {
+    createSite({
+      authorId: user.uid,
+      createdAt: new Date().toISOString(),
+      site,
+      url
+    })
+    toast({
+      title: 'Side added.',
+      description: "We've added the site to your account.",
+      status: 'success',
+      duration: 2500,
+      isClosable: true
+    })
+    onClose()
+  }
 
   return (
     <>
