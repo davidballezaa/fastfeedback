@@ -25,7 +25,7 @@ export default function Home() {
           View Dashboard
         </Button>
       ) : (
-        <Button mt={4} size="sm" onClick={e => authObj.signinWithGitHub()}>
+        <Button mt={4} size="sm" onClick={e => authObj.signinWithGithub()}>
           Sign In
         </Button>
       )}
