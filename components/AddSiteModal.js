@@ -21,7 +21,7 @@ import { useForm } from 'react-hook-form'
 import { useAuth } from '../lib/auth'
 import { createSite } from '../lib/db'
 
-export default function AddSiteModal() {
+export default function AddSiteModal({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const initialRef = useRef()
@@ -55,7 +55,19 @@ export default function AddSiteModal() {
 
   return (
     <>
-      <Button onClick={onOpen}>Add Site</Button>
+      <Button
+        onClick={onOpen}
+        backgroundColor="gray.900"
+        color="white"
+        fontWeight="medium"
+        _hover={{ bg: 'gray.700' }}
+        _active={{
+          bg: 'gray.800',
+          transform: 'scale(0.95)'
+        }}
+      >
+        {children}
+      </Button>
 
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
