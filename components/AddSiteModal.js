@@ -1,5 +1,7 @@
 import { useRef } from 'react'
 
+import { useSWRConfig } from 'swr'
+
 import {
   Modal,
   ModalOverlay,
@@ -26,6 +28,8 @@ export default function AddSiteModal({ children }) {
 
   const initialRef = useRef()
 
+  const { mutate } = useSWRConfig()
+
   const toast = useToast()
 
   const { user } = useAuth()
@@ -36,13 +40,14 @@ export default function AddSiteModal({ children }) {
     formState: { errors }
   } = useForm()
 
-  const onCreateSite = ({ site, url }) => {
-    createSite({
+  const onCreateSite = ({ name, url }) => {
+    const newSite = {
       authorId: user.uid,
       createdAt: new Date().toISOString(),
-      site,
+      name,
       url
-    })
+    }
+    createSite(newSite)
     toast({
       title: 'Side added.',
       description: "We've added the site to your account.",
@@ -50,6 +55,13 @@ export default function AddSiteModal({ children }) {
       duration: 2500,
       isClosable: true
     })
+    mutate(
+      '/api/sites',
+      async data => {
+        return { sites: [...data.sites, newSite] }
+      },
+      false
+    )
     onClose()
   }
 
@@ -75,17 +87,17 @@ export default function AddSiteModal({ children }) {
           <ModalHeader fontWeight="bold">Add Site</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isInvalid={errors.site}>
+            <FormControl isInvalid={errors.name}>
               <FormLabel>Site</FormLabel>
               <Input
                 ref={initialRef}
                 placeholder="My site"
-                {...register('site', {
+                {...register('name', {
                   required: 'This field is required'
                 })}
               />
-              {errors.site && (
-                <FormErrorMessage>{errors.site.message}</FormErrorMessage>
+              {errors.name && (
+                <FormErrorMessage>{errors.name.message}</FormErrorMessage>
               )}
             </FormControl>
 
