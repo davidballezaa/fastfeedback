@@ -1,5 +1,6 @@
 import { Box, Button, FormControl, FormLabel, Input } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 import Feedback from '../../components/Feedback'
 import { useAuth } from '../../lib/auth'
@@ -32,6 +33,7 @@ export async function getStaticPaths() {
 export default function SiteFeedback({ initialFeedback }) {
   const auth = useAuth()
   const router = useRouter()
+  const [allFeedback, setAllFeedback] = useState(initialFeedback)
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -45,6 +47,7 @@ export default function SiteFeedback({ initialFeedback }) {
       text: event.target.feedback.value
     }
 
+    setAllFeedback([newFeedback, ...allFeedback])
     createFeedback(newFeedback)
   }
 
@@ -59,7 +62,7 @@ export default function SiteFeedback({ initialFeedback }) {
           Add Comment
         </Button>
       </Box>
-      {initialFeedback.map(feedback => (
+      {allFeedback.map(feedback => (
         <Feedback key={feedback.feedbackId} {...feedback} />
       ))}
     </Box>
