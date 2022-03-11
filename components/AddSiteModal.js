@@ -56,9 +56,9 @@ export default function AddSiteModal({ children }) {
       isClosable: true
     })
     mutate(
-      '/api/sites',
+      ['/api/sites', user.token],
       async data => {
-        return { sites: [...data.sites, newSite] }
+        return { sites: [newSite, ...data.sites] }
       },
       false
     )
